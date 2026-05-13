@@ -24,6 +24,8 @@ public class OrderInfo {
     private String appointSlot;
     private String remark;
     private BigDecimal totalPrice;
+    private Long staffId;
+    private LocalDateTime assignTime;
     private LocalDateTime payTime;
     private LocalDateTime acceptTime;
     private LocalDateTime startTime;

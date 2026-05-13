@@ -71,6 +71,14 @@ public final class MerchantDtos {
     }
 
     @Data
+    public static class OrderRejectRequest {
+        @NotNull(message = "订单ID不能为空")
+        private Long orderId;
+        @NotBlank(message = "拒单原因不能为空")
+        private String reason;
+    }
+
+    @Data
     public static class ReviewReplyRequest {
         @NotNull(message = "评价ID不能为空")
         private Long reviewId;
@@ -83,5 +91,51 @@ public final class MerchantDtos {
         private Integer hasReply;
         private Integer pageNum = 1;
         private Integer pageSize = 10;
+    }
+
+    @Data
+    public static class StaffQuery {
+        private String keyword;
+        private Integer status;
+    }
+
+    @Data
+    public static class StaffSaveRequest {
+        private Long id;
+        @NotBlank(message = "员工姓名不能为空")
+        private String name;
+        @NotBlank(message = "联系电话不能为空")
+        private String phone;
+        private String specialty;
+    }
+
+    @Data
+    public static class StaffStatusRequest {
+        @NotNull(message = "员工ID不能为空")
+        private Long staffId;
+        @NotNull(message = "状态不能为空")
+        private Integer status;
+    }
+
+    @Data
+    public static class StaffResetPasswordRequest {
+        @NotNull(message = "员工ID不能为空")
+        private Long staffId;
+    }
+
+    @Data
+    public static class OrderAssignStaffRequest {
+        @NotNull(message = "订单ID不能为空")
+        private Long orderId;
+        @NotNull(message = "服务人员ID不能为空")
+        private Long staffId;
+    }
+
+    @Data
+    public static class MessageSendRequest {
+        @NotNull(message = "订单ID不能为空")
+        private Long orderId;
+        @NotBlank(message = "消息内容不能为空")
+        private String content;
     }
 }

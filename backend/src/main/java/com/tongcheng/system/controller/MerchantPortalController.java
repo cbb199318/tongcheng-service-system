@@ -4,7 +4,6 @@ import com.tongcheng.system.common.ApiResponse;
 import com.tongcheng.system.common.PageResult;
 import com.tongcheng.system.dto.MerchantDtos;
 import com.tongcheng.system.entity.Merchant;
-import com.tongcheng.system.entity.ServiceItem;
 import com.tongcheng.system.security.RequireRole;
 import com.tongcheng.system.service.AuthService;
 import com.tongcheng.system.service.MerchantPortalService;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -38,6 +38,11 @@ public class MerchantPortalController {
         return ApiResponse.success(merchantPortalService.getMerchantDetail(authService.requireCurrentUser().getUserId()));
     }
 
+    @GetMapping("/dashboard/summary")
+    public ApiResponse<Map<String, Object>> dashboardSummary() {
+        return ApiResponse.success(merchantPortalService.getDashboardSummary(authService.requireCurrentUser().getUserId()));
+    }
+
     @PutMapping("/info/update")
     public ApiResponse<Void> update(@Validated @RequestBody MerchantDtos.MerchantUpdateRequest request) {
         merchantPortalService.updateMerchantInfo(authService.requireCurrentUser().getUserId(), request);
@@ -45,7 +50,7 @@ public class MerchantPortalController {
     }
 
     @GetMapping("/service/list")
-    public ApiResponse<PageResult<ServiceItem>> serviceList(MerchantDtos.ServiceQuery query) {
+    public ApiResponse<PageResult<Map<String, Object>>> serviceList(MerchantDtos.ServiceQuery query) {
         return ApiResponse.success(merchantPortalService.pageServices(authService.requireCurrentUser().getUserId(), query));
     }
 
@@ -56,7 +61,7 @@ public class MerchantPortalController {
     }
 
     @GetMapping("/service/{id}")
-    public ApiResponse<ServiceItem> serviceDetail(@PathVariable Long id) {
+    public ApiResponse<Map<String, Object>> serviceDetail(@PathVariable Long id) {
         return ApiResponse.success(merchantPortalService.getServiceDetail(authService.requireCurrentUser().getUserId(), id));
     }
 
@@ -88,6 +93,33 @@ public class MerchantPortalController {
         return ApiResponse.success(merchantPortalService.getOrderDetail(authService.requireCurrentUser().getUserId(), id));
     }
 
+    @GetMapping("/staff/list")
+    public ApiResponse<List<Map<String, Object>>> staffList(MerchantDtos.StaffQuery query) {
+        return ApiResponse.success(merchantPortalService.pageStaff(authService.requireCurrentUser().getUserId(), query));
+    }
+
+    @PostMapping("/staff/create")
+    public ApiResponse<Map<String, Object>> staffCreate(@Validated @RequestBody MerchantDtos.StaffSaveRequest request) {
+        return ApiResponse.success("员工创建成功", merchantPortalService.createStaff(authService.requireCurrentUser().getUserId(), request));
+    }
+
+    @PutMapping("/staff/update")
+    public ApiResponse<Void> staffUpdate(@Validated @RequestBody MerchantDtos.StaffSaveRequest request) {
+        merchantPortalService.updateStaff(authService.requireCurrentUser().getUserId(), request);
+        return ApiResponse.success("员工信息更新成功", null);
+    }
+
+    @PostMapping("/staff/status")
+    public ApiResponse<Void> staffStatus(@Validated @RequestBody MerchantDtos.StaffStatusRequest request) {
+        merchantPortalService.updateStaffStatus(authService.requireCurrentUser().getUserId(), request);
+        return ApiResponse.success("员工状态更新成功", null);
+    }
+
+    @PostMapping("/staff/reset-password")
+    public ApiResponse<Map<String, Object>> resetStaffPassword(@Validated @RequestBody MerchantDtos.StaffResetPasswordRequest request) {
+        return ApiResponse.success("密码重置成功", merchantPortalService.resetStaffPassword(authService.requireCurrentUser().getUserId(), request.getStaffId()));
+    }
+
     @PostMapping("/order/accept")
     public ApiResponse<Void> orderAccept(@Validated @RequestBody MerchantDtos.OrderActionRequest request) {
         merchantPortalService.acceptOrder(authService.requireCurrentUser().getUserId(), request.getOrderId());
@@ -95,7 +127,7 @@ public class MerchantPortalController {
     }
 
     @PostMapping("/order/reject")
-    public ApiResponse<Void> orderReject(@Validated @RequestBody MerchantDtos.OrderActionRequest request) {
+    public ApiResponse<Void> orderReject(@Validated @RequestBody MerchantDtos.OrderRejectRequest request) {
         merchantPortalService.rejectOrder(authService.requireCurrentUser().getUserId(), request);
         return ApiResponse.success("拒单成功", null);
     }
@@ -110,6 +142,23 @@ public class MerchantPortalController {
     public ApiResponse<Void> orderComplete(@Validated @RequestBody MerchantDtos.OrderActionRequest request) {
         merchantPortalService.completeOrder(authService.requireCurrentUser().getUserId(), request.getOrderId());
         return ApiResponse.success("服务已完成", null);
+    }
+
+    @PostMapping("/order/assign-staff")
+    public ApiResponse<Void> assignStaff(@Validated @RequestBody MerchantDtos.OrderAssignStaffRequest request) {
+        merchantPortalService.assignStaff(authService.requireCurrentUser().getUserId(), request);
+        return ApiResponse.success("服务人员分配成功", null);
+    }
+
+    @GetMapping("/order/message/list")
+    public ApiResponse<List<Map<String, Object>>> orderMessageList(Long orderId) {
+        return ApiResponse.success(merchantPortalService.listOrderMessages(authService.requireCurrentUser().getUserId(), orderId));
+    }
+
+    @PostMapping("/order/message/send")
+    public ApiResponse<Void> orderMessageSend(@Validated @RequestBody MerchantDtos.MessageSendRequest request) {
+        merchantPortalService.sendOrderMessage(authService.requireCurrentUser().getUserId(), request);
+        return ApiResponse.success("发送成功", null);
     }
 
     @GetMapping("/review/list")

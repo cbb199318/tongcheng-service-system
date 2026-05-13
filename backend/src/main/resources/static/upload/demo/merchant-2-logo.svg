@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="140" viewBox="0 0 240 140">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="140" rx="28" fill="url(#bg)"/>
+  <circle cx="62" cy="70" r="34" fill="#ffffff" fill-opacity="0.2"/>
+  <text x="43" y="82" font-size="28" font-weight="700" font-family="Arial, sans-serif" fill="#ffffff">S</text>
+  <text x="102" y="66" font-size="20" font-weight="700" font-family="Arial, sans-serif" fill="#ffffff">SUXIU</text>
+  <text x="102" y="92" font-size="18" font-family="Arial, sans-serif" fill="#dbeafe">REPAIR TEAM</text>
+</svg>

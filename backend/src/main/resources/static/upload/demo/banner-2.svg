@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="320" fill="url(#bg)"/>
+  <rect x="830" y="34" width="260" height="252" rx="32" fill="#e0f2fe" fill-opacity="0.18"/>
+  <rect x="886" y="70" width="148" height="148" rx="24" fill="#f8fafc" fill-opacity="0.92"/>
+  <path d="M960 98c-35 0-64 29-64 64 0 19 8 37 22 49l19-23c-8-7-13-17-13-28 0-20 16-36 36-36 11 0 21 5 28 13l23-19c-12-14-30-20-51-20z" fill="#0ea5e9"/>
+  <path d="M987 139c9 7 15 18 15 31 0 20-16 36-36 36-7 0-14-2-20-6l-19 23c11 7 25 11 39 11 35 0 64-29 64-64 0-21-10-40-25-52z" fill="#2563eb"/>
+  <text x="72" y="104" font-size="18" font-family="Arial, sans-serif" fill="#dbeafe">AIR CONDITIONER SERVICE</text>
+  <text x="72" y="162" font-size="52" font-weight="700" font-family="Arial, sans-serif" fill="#ffffff">Cooling Repair Special</text>
+  <text x="72" y="208" font-size="24" font-family="Arial, sans-serif" fill="#e0f2fe">Inspection, maintenance and repair in one visit.</text>
+  <rect x="72" y="230" width="218" height="50" rx="25" fill="#ffffff"/>
+  <text x="112" y="262" font-size="24" font-weight="700" font-family="Arial, sans-serif" fill="#1d4ed8">View Deals</text>
+</svg>

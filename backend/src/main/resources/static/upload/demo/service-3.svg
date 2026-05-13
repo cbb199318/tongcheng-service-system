@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dbeafe"/>
+      <stop offset="100%" stop-color="#7dd3fc"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="420" fill="url(#bg)"/>
+  <rect x="118" y="102" width="404" height="182" rx="26" fill="#eff6ff" fill-opacity="0.94"/>
+  <rect x="148" y="132" width="344" height="122" rx="18" fill="#0ea5e9" fill-opacity="0.16"/>
+  <circle cx="270" cy="194" r="48" fill="#38bdf8"/>
+  <path d="M270 152c-23 0-42 19-42 42 0 12 5 24 14 32l13-16c-5-4-8-10-8-16 0-13 10-23 23-23 6 0 13 2 17 8l16-13c-8-9-19-14-33-14z" fill="#ffffff"/>
+  <path d="M287 177c6 4 10 11 10 19 0 13-10 23-23 23-4 0-9-1-13-4l-13 16c8 5 17 8 27 8 23 0 42-19 42-42 0-14-7-26-18-34z" fill="#1d4ed8"/>
+  <rect x="370" y="166" width="84" height="24" rx="12" fill="#38bdf8"/>
+  <rect x="370" y="202" width="58" height="24" rx="12" fill="#0f172a" fill-opacity="0.18"/>
+  <text x="78" y="338" font-size="36" font-weight="700" font-family="Arial, sans-serif" fill="#1e3a8a">AC Repair Visit</text>
+  <text x="78" y="372" font-size="19" font-family="Arial, sans-serif" fill="#1d4ed8">Fast diagnostics for cooling and airflow issues.</text>
+</svg>

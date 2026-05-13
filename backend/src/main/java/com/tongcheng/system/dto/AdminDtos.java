@@ -41,6 +41,14 @@ public final class AdminDtos {
         @NotBlank(message = "审核状态不能为空")
         private String status;
         private String remark;
+
+        public String getStatus() {
+            return status == null ? null : status.trim();
+        }
+
+        public String getRemark() {
+            return remark == null ? null : remark.trim();
+        }
     }
 
     @Data

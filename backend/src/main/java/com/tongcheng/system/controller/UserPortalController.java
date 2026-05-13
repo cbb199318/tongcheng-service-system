@@ -73,6 +73,21 @@ public class UserPortalController {
         return ApiResponse.success(userPortalService.getOrderDetail(userId, id));
     }
 
+    @GetMapping("/order/message/list")
+    @RequireRole({"user"})
+    public ApiResponse<List<Map<String, Object>>> orderMessageList(@RequestParam Long orderId) {
+        Long userId = authService.requireCurrentUser().getUserId();
+        return ApiResponse.success(userPortalService.listOrderMessages(userId, orderId));
+    }
+
+    @PostMapping("/order/message/send")
+    @RequireRole({"user"})
+    public ApiResponse<Void> orderMessageSend(@Validated @RequestBody UserDtos.MessageSendRequest request) {
+        Long userId = authService.requireCurrentUser().getUserId();
+        userPortalService.sendOrderMessage(userId, request);
+        return ApiResponse.success("发送成功", null);
+    }
+
     @PostMapping("/order/pay")
     @RequireRole({"user"})
     public ApiResponse<Void> payOrder(@Validated @RequestBody UserDtos.OrderActionRequest request) {
@@ -121,8 +136,8 @@ public class UserPortalController {
 
     @PostMapping("/points/exchange")
     @RequireRole({"user"})
-    public ApiResponse<Map<String, Object>> pointsExchange() {
+    public ApiResponse<Map<String, Object>> pointsExchange(@Validated @RequestBody UserDtos.PointsExchangeRequest request) {
         Long userId = authService.requireCurrentUser().getUserId();
-        return ApiResponse.success(userPortalService.exchangePoints(userId));
+        return ApiResponse.success(userPortalService.exchangePoints(userId, request));
     }
 }

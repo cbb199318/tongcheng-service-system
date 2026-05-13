@@ -7,8 +7,6 @@ import com.tongcheng.system.entity.Banner;
 import com.tongcheng.system.entity.Category;
 import com.tongcheng.system.entity.Merchant;
 import com.tongcheng.system.entity.Notice;
-import com.tongcheng.system.entity.ServiceItem;
-import com.tongcheng.system.entity.User;
 import com.tongcheng.system.security.RequireRole;
 import com.tongcheng.system.service.AdminPortalService;
 import org.springframework.validation.annotation.Validated;
@@ -37,7 +35,7 @@ public class AdminPortalController {
     }
 
     @GetMapping("/user/list")
-    public ApiResponse<PageResult<User>> userList(AdminDtos.UserQuery query) {
+    public ApiResponse<PageResult<Map<String, Object>>> userList(AdminDtos.UserQuery query) {
         return ApiResponse.success(adminPortalService.pageUsers(query));
     }
 
@@ -70,12 +68,12 @@ public class AdminPortalController {
     }
 
     @GetMapping("/service/list")
-    public ApiResponse<PageResult<ServiceItem>> serviceList(AdminDtos.ServiceQuery query) {
+    public ApiResponse<PageResult<Map<String, Object>>> serviceList(AdminDtos.ServiceQuery query) {
         return ApiResponse.success(adminPortalService.pageServices(query));
     }
 
     @GetMapping("/service/{id}")
-    public ApiResponse<ServiceItem> serviceDetail(@PathVariable Long id) {
+    public ApiResponse<Map<String, Object>> serviceDetail(@PathVariable Long id) {
         return ApiResponse.success(adminPortalService.getServiceDetail(id));
     }
 
@@ -177,5 +175,10 @@ public class AdminPortalController {
     @GetMapping("/statistics/category-rate")
     public ApiResponse<List<Map<String, Object>>> categoryRate() {
         return ApiResponse.success(adminPortalService.getCategoryRate());
+    }
+
+    @GetMapping("/statistics/merchant-rank")
+    public ApiResponse<List<Map<String, Object>>> merchantRank(@RequestParam(defaultValue = "5") int limit) {
+        return ApiResponse.success(adminPortalService.getMerchantRank(limit));
     }
 }

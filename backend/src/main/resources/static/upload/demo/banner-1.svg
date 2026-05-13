@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#155e75"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="320" fill="url(#bg)"/>
+  <circle cx="980" cy="70" r="120" fill="#ffffff" fill-opacity="0.12"/>
+  <circle cx="1080" cy="250" r="160" fill="#ffffff" fill-opacity="0.08"/>
+  <rect x="72" y="72" width="180" height="32" rx="16" fill="#ecfeff" fill-opacity="0.24"/>
+  <text x="95" y="94" font-size="18" font-family="Arial, sans-serif" fill="#ecfeff">SPRING CLEANING</text>
+  <text x="72" y="156" font-size="54" font-weight="700" font-family="Arial, sans-serif" fill="#ffffff">Deep Home Care Sale</text>
+  <text x="72" y="204" font-size="24" font-family="Arial, sans-serif" fill="#d1fae5">Trusted cleaners, fixed pricing, same-day booking.</text>
+  <rect x="72" y="232" width="194" height="50" rx="25" fill="#ffffff"/>
+  <text x="117" y="264" font-size="24" font-weight="700" font-family="Arial, sans-serif" fill="#0f766e">Book Cleaning</text>
+</svg>

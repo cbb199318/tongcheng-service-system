@@ -40,6 +40,7 @@ public final class UserDtos {
     @Data
     public static class OrderPageQuery {
         private String status;
+        private String statusGroup;
         private Integer pageNum = 1;
         private Integer pageSize = 10;
     }
@@ -83,7 +84,22 @@ public final class UserDtos {
         @NotBlank(message = "商家地址不能为空")
         private String address;
         private String intro;
+        private String logo;
         @NotBlank(message = "资质文件不能为空")
         private String license;
+    }
+
+    @Data
+    public static class PointsExchangeRequest {
+        @NotBlank(message = "兑换项不能为空")
+        private String itemCode;
+    }
+
+    @Data
+    public static class MessageSendRequest {
+        @NotNull(message = "订单ID不能为空")
+        private Long orderId;
+        @NotBlank(message = "消息内容不能为空")
+        private String content;
     }
 }

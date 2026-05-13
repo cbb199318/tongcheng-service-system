@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420">
+  <rect width="640" height="420" rx="28" fill="#eff6ff"/>
+  <rect x="30" y="30" width="580" height="360" rx="22" fill="#ffffff" stroke="#2563eb" stroke-width="6"/>
+  <text x="60" y="100" font-size="34" font-weight="700" font-family="Arial, sans-serif" fill="#0f172a">SERVICE PERMIT</text>
+  <text x="60" y="152" font-size="22" font-family="Arial, sans-serif" fill="#334155">Merchant: Suxiu Repair Team</text>
+  <text x="60" y="194" font-size="22" font-family="Arial, sans-serif" fill="#334155">Business Scope: Appliance repair, pipe service</text>
+  <text x="60" y="236" font-size="22" font-family="Arial, sans-serif" fill="#334155">Status: Valid Demo Credential</text>
+  <rect x="60" y="284" width="160" height="58" rx="16" fill="#2563eb" fill-opacity="0.12"/>
+  <text x="84" y="321" font-size="26" font-weight="700" font-family="Arial, sans-serif" fill="#2563eb">VERIFIED</text>
+</svg>

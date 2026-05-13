@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c2d12"/>
+      <stop offset="100%" stop-color="#fb923c"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="320" fill="url(#bg)"/>
+  <rect x="820" y="96" width="250" height="118" rx="28" fill="#fff7ed" fill-opacity="0.18"/>
+  <rect x="860" y="138" width="150" height="56" rx="18" fill="#fff7ed" fill-opacity="0.86"/>
+  <circle cx="892" cy="202" r="26" fill="#fff7ed" fill-opacity="0.86"/>
+  <circle cx="978" cy="202" r="26" fill="#fff7ed" fill-opacity="0.86"/>
+  <text x="72" y="104" font-size="18" font-family="Arial, sans-serif" fill="#ffedd5">LOCAL MOVING</text>
+  <text x="72" y="162" font-size="52" font-weight="700" font-family="Arial, sans-serif" fill="#ffffff">Flat-Rate Moving Plan</text>
+  <text x="72" y="208" font-size="24" font-family="Arial, sans-serif" fill="#ffedd5">Packing, transport and upstairs delivery in one package.</text>
+  <rect x="72" y="230" width="230" height="50" rx="25" fill="#ffffff"/>
+  <text x="121" y="262" font-size="24" font-weight="700" font-family="Arial, sans-serif" fill="#9a3412">Reserve Now</text>
+</svg>

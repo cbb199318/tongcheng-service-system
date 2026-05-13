@@ -39,4 +39,4 @@ jwt:
   expire-hours: 24
 
 app:
-  upload-dir: backend/uploads
+  upload-dir: uploads

@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,8 +35,8 @@ public class CommonController {
         if (extension != null && !extension.isBlank()) {
             fileName = fileName + "." + extension;
         }
-        String dir = uploadDir + "/" + LocalDate.now();
-        File targetDir = new File(dir);
+        Path targetDirPath = Paths.get(uploadDir, LocalDate.now().toString()).toAbsolutePath().normalize();
+        File targetDir = targetDirPath.toFile();
         if (!targetDir.exists()) {
             targetDir.mkdirs();
         }

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420">
+  <rect width="640" height="420" rx="28" fill="#f8fafc"/>
+  <rect x="30" y="30" width="580" height="360" rx="22" fill="#ffffff" stroke="#0f766e" stroke-width="6"/>
+  <text x="60" y="100" font-size="34" font-weight="700" font-family="Arial, sans-serif" fill="#0f172a">BUSINESS LICENSE</text>
+  <text x="60" y="152" font-size="22" font-family="Arial, sans-serif" fill="#334155">Merchant: Anxin Home Service</text>
+  <text x="60" y="194" font-size="22" font-family="Arial, sans-serif" fill="#334155">Business Scope: Cleaning, moving, home care</text>
+  <text x="60" y="236" font-size="22" font-family="Arial, sans-serif" fill="#334155">Status: Valid Demo Credential</text>
+  <rect x="60" y="284" width="150" height="58" rx="16" fill="#0f766e" fill-opacity="0.12"/>
+  <text x="86" y="321" font-size="26" font-weight="700" font-family="Arial, sans-serif" fill="#0f766e">STAMPED</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#cffafe"/>
+      <stop offset="100%" stop-color="#99f6e4"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="420" fill="url(#bg)"/>
+  <rect x="70" y="82" width="248" height="220" rx="28" fill="#ffffff" fill-opacity="0.86"/>
+  <rect x="346" y="116" width="220" height="156" rx="26" fill="#0f766e" fill-opacity="0.14"/>
+  <path d="M150 270c8-56 36-99 82-127l23 28c-33 23-52 56-58 99z" fill="#14b8a6"/>
+  <path d="M250 151c40 18 73 55 91 105l-44 11c-13-40-36-68-66-84z" fill="#0f766e"/>
+  <circle cx="200" cy="190" r="30" fill="#ffffff"/>
+  <text x="70" y="356" font-size="34" font-weight="700" font-family="Arial, sans-serif" fill="#115e59">Deep Cleaning</text>
+  <text x="70" y="388" font-size="19" font-family="Arial, sans-serif" fill="#134e4a">Kitchen, bathroom and whole-home detail care.</text>
+</svg>
