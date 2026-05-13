@@ -8,6 +8,22 @@ backend/data/
 
 frontend/node_modules/
 frontend/dist/
+frontend/test-results/
+frontend/tmp/
 
 *.log
 thesis_images/
+test-results/
+.tmp-admin-retest/
+.tmp-admin-retest-after/
+.tmp-admin-test-screens/
+.tmp-merchant-test-screens/
+.tmp-mysql-proof/
+tmp/*-artifacts/logs/
+tmp/*-artifacts/screenshots/
+tmp/*-artifacts/chrome-profile/
+tmp/ch6-test-artifacts/
+tmp/user-test-artifacts/
+tmp/merchant-test-artifacts/
+tmp/staff-merged-test-artifacts/
+uploads/

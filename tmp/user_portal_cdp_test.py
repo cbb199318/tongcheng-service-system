@@ -8,7 +8,7 @@ from pathlib import Path
 import requests
 import websockets
 
-BASE_URL = "http://127.0.0.1:3000/user.html#/login"
+BASE_URL = "http://127.0.0.1:3000/#/user/login"
 API_BASE = "http://127.0.0.1:8080"
 DEBUG_PORT = 9223
 OUT_DIR = Path("/Users/caobingbing/workspace/tongcheng-service-system/tmp/user-test-artifacts")
@@ -79,9 +79,9 @@ class CDPClient:
 async def get_or_create_page_ws():
     pages = requests.get(f"http://127.0.0.1:{DEBUG_PORT}/json", timeout=10).json()
     for page in pages:
-        if page.get("type") == "page" and "user.html" in page.get("url", ""):
+        if page.get("type") == "page" and "#/user" in page.get("url", ""):
             return page["webSocketDebuggerUrl"]
-    create = requests.put(f"http://127.0.0.1:{DEBUG_PORT}/json/new?{BASE_URL}", timeout=10)
+    create = requests.put(f"http://127.0.0.1:{DEBUG_PORT}/json/new?http://127.0.0.1:3000/", timeout=10)
     return create.json()["webSocketDebuggerUrl"]
 
 
@@ -238,8 +238,11 @@ async def set_review_form(client: CDPClient):
 
 
 async def open_route(client: CDPClient, hash_path: str):
-    await eval_js(client, f"location.hash = {json.dumps(hash_path)}")
-    await wait_for(client, f"location.hash === {json.dumps(hash_path)} || location.hash.startsWith({json.dumps(hash_path + '?')})")
+    target = hash_path
+    if target.startswith("#/") and not target.startswith("#/user/"):
+        target = "#/user" + target[1:]
+    await eval_js(client, f"location.hash = {json.dumps(target)}")
+    await wait_for(client, f"location.hash === {json.dumps(target)} || location.hash.startsWith({json.dumps(target + '?')})")
 
 
 async def run():
@@ -433,7 +436,7 @@ async def run():
             })()
             """,
         )
-        await wait_for(client, "location.hash.match(/#\\/orders\\/\\d+/)")
+        await wait_for(client, "location.hash.includes('/orders/')")
         await wait_for(client, "document.body.innerText.includes('订单详情')")
         order_detail_shot = await screenshot(client, "10_order_detail")
         if await eval_js(client, "document.body.innerText.includes('订单详情') && document.body.innerText.includes('服务地址')"):

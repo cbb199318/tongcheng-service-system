@@ -1,7 +1,16 @@
-(function () {
-  const API_BASE = 'http://127.0.0.1:8080';
-  const LOCAL_SERVICE_PLACEHOLDER = './public/service-placeholder.svg';
-  const api = axios.create({ baseURL: API_BASE });
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import axios from 'axios';
+import { createPortalRouter } from '../../utils/portalRouter';
+
+const API_BASE = '';
+const RESOURCE_BASE = 'http://127.0.0.1:8080';
+const LOCAL_SERVICE_PLACEHOLDER = '/service-placeholder.svg';
+const api = axios.create({ baseURL: API_BASE });
+
+Vue.use(VueRouter);
+
+function createUserPortal(el) {
 
   function defaultOrderForm() {
     return { appointDate: '', appointSlot: '上午 (08:00-12:00)', address: '', remark: '' };
@@ -25,7 +34,7 @@
       return url;
     }
     if (url.indexOf('/upload/') === 0) {
-      return API_BASE + url;
+      return RESOURCE_BASE + url;
     }
     return url;
   }
@@ -1001,8 +1010,7 @@
     }
   };
 
-  const router = new VueRouter({
-    routes: [
+  const portalRouter = createPortalRouter(VueRouter, '/user', [
       { path: '/', redirect: '/home' },
       { path: '/login', component: LoginPage },
       { path: '/register', component: RegisterPage },
@@ -1016,8 +1024,8 @@
       { path: '/review/:orderId', component: ReviewPage, meta: { requiresAuth: true } },
       { path: '/merchant/apply', component: MerchantApplyPage, meta: { requiresAuth: true } },
       { path: '/points', component: PointsPage, meta: { requiresAuth: true } }
-    ]
-  });
+    ]);
+  const router = portalRouter.router;
 
   router.beforeEach(function (to, from, next) {
     const token = localStorage.getItem('userToken') || '';
@@ -1036,8 +1044,7 @@
     window.scrollTo(0, 0);
   });
 
-  new Vue({
-    el: '#user-app',
+  const app = new Vue({
     router: router,
     template: `
       <div class="user-shell">
@@ -1695,4 +1702,16 @@
       }
     }
   });
-})();
+
+  app.$mount(el);
+  var originalDestroy = app.$destroy;
+  app.$destroy = function () {
+    portalRouter.teardown();
+    return originalDestroy.call(this);
+  };
+  return { app: app, router: router };
+}
+
+export function mountUserPortal(el) {
+  return createUserPortal(el);
+}

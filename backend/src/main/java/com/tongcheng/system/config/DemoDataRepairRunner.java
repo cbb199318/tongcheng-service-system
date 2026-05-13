@@ -382,6 +382,7 @@ public class DemoDataRepairRunner implements ApplicationRunner {
         if (staffUser == null) {
             staffUser = new User();
             staffUser.setUsername(DEMO_STAFF_USERNAME);
+            staffUser.setPassword(passwordEncoder.encode("123456"));
             staffUser.setNickname("李师傅");
             staffUser.setPhone("13800000018");
             staffUser.setRole("staff");
@@ -395,10 +396,12 @@ public class DemoDataRepairRunner implements ApplicationRunner {
             staffUser.setStatus(1);
             staffUser.setNickname("李师傅");
             staffUser.setPhone("13800000018");
+            if (staffUser.getPassword() == null || staffUser.getPassword().isBlank()) {
+                staffUser.setPassword(passwordEncoder.encode("123456"));
+            }
             staffUser.setUpdateTime(LocalDateTime.now());
+            userMapper.updateById(staffUser);
         }
-        staffUser.setPassword(passwordEncoder.encode("123456"));
-        userMapper.updateById(staffUser);
 
         StaffMember staffMember = staffMemberMapper.selectOne(new LambdaQueryWrapper<StaffMember>()
                 .eq(StaffMember::getUserId, staffUser.getId())

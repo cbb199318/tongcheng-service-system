@@ -1,7 +1,14 @@
-(function () {
-  const API_BASE = 'http://127.0.0.1:8080';
-  const LOCAL_SERVICE_PLACEHOLDER = './public/service-placeholder.svg';
-  const api = axios.create({ baseURL: API_BASE });
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import axios from 'axios';
+import { createPortalRouter } from '../../utils/portalRouter';
+
+const API_BASE = '';
+const RESOURCE_BASE = 'http://127.0.0.1:8080';
+const LOCAL_SERVICE_PLACEHOLDER = '/service-placeholder.svg';
+const api = axios.create({ baseURL: API_BASE });
+
+function createAdminPortal(el) {
 
   function defaultPageResult(pageSize) {
     return { list: [], total: 0, pageNum: 1, pageSize: pageSize || 10 };
@@ -26,7 +33,7 @@
   function normalizeResourceUrl(url) {
     if (!url) return '';
     if (/^https?:\/\//.test(url) || /^data:/.test(url)) return url;
-    if (url.indexOf('/upload/') === 0) return API_BASE + url;
+    if (url.indexOf('/upload/') === 0) return RESOURCE_BASE + url;
     return url;
   }
 
@@ -861,7 +868,8 @@
     { path: '/banners', name: 'banners', component: BannersPage, meta: { requiresAuth: true } }
   ];
 
-  const router = new VueRouter({ routes: routes });
+  const portalRouter = createPortalRouter(VueRouter, '/admin', routes);
+  const router = portalRouter.router;
 
   router.beforeEach(function (to, from, next) {
     var token = localStorage.getItem('adminToken');
@@ -880,8 +888,7 @@
     window.scrollTo(0, 0);
   });
 
-  new Vue({
-    el: '#admin-app',
+  const app = new Vue({
     router: router,
     template: `
       <div class="admin-shell">
@@ -1197,7 +1204,7 @@
         this.handleRouteChange(this.$route);
       },
       goHome: function () {
-        window.location.href = './index.html';
+        window.location.href = './';
       },
       login: function () {
         var vm = this;
@@ -1898,4 +1905,16 @@
       }
     }
   });
-})();
+
+  app.$mount(el);
+  var originalDestroy = app.$destroy;
+  app.$destroy = function () {
+    portalRouter.teardown();
+    return originalDestroy.call(this);
+  };
+  return { app: app, router: router };
+}
+
+export function mountAdminPortal(el) {
+  return createAdminPortal(el);
+}

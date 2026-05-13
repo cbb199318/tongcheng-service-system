@@ -8,8 +8,8 @@ from pathlib import Path
 import requests
 import websockets
 
-USER_BASE_URL = "http://127.0.0.1:3000/user.html#/login"
-ADMIN_BASE_URL = "http://127.0.0.1:3000/admin.html#/login"
+USER_BASE_URL = "http://127.0.0.1:3000/#/user/login"
+ADMIN_BASE_URL = "http://127.0.0.1:3000/#/admin/login"
 API_BASE = "http://127.0.0.1:8080"
 DEBUG_PORT = 9223
 OUT_DIR = Path("/Users/caobingbing/workspace/tongcheng-service-system/tmp/ch6-test-artifacts")
@@ -65,7 +65,7 @@ def get_page_ws(base_url: str, keyword: str) -> str:
     for page in pages:
         if page.get("type") == "page" and keyword in page.get("url", ""):
             return page["webSocketDebuggerUrl"]
-    create = requests.put(f"http://127.0.0.1:{DEBUG_PORT}/json/new?{base_url}", timeout=10)
+    create = requests.put(f"http://127.0.0.1:{DEBUG_PORT}/json/new?http://127.0.0.1:3000/", timeout=10)
     return create.json()["webSocketDebuggerUrl"]
 
 
@@ -144,7 +144,7 @@ def api_user_home():
 
 
 async def run_tc001():
-    client = CDPClient(get_page_ws(USER_BASE_URL, "user.html"))
+    client = CDPClient(get_page_ws(USER_BASE_URL, "#/user"))
     await client.connect()
     try:
         await navigate(client, USER_BASE_URL)
@@ -158,7 +158,7 @@ async def run_tc001():
             })()
             """,
         )
-        await navigate(client, "http://127.0.0.1:3000/user.html#/register")
+        await navigate(client, "http://127.0.0.1:3000/#/user/register")
         await wait_for(client, "window.__userApp && window.__userApp.$route.path === '/register'")
         suffix = str(int(time.time()))[-6:]
         username = f"zhangsan_{suffix}"
@@ -222,7 +222,7 @@ async def admin_login(client: CDPClient):
         """,
     )
     await navigate(client, ADMIN_BASE_URL)
-    await wait_for(client, "window.__adminApp && window.__adminApp.$route.path === '/login'")
+    await wait_for(client, "window.__adminApp && location.hash.includes('/admin/login')")
     await eval_js(
         client,
         """
@@ -239,7 +239,7 @@ async def admin_login(client: CDPClient):
 
 
 async def run_tc015_tc017_tc018():
-    client = CDPClient(get_page_ws(ADMIN_BASE_URL, "admin.html"))
+    client = CDPClient(get_page_ws(ADMIN_BASE_URL, "#/admin"))
     await client.connect()
     try:
         await admin_login(client)

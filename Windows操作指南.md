@@ -9,9 +9,9 @@
 - 后端：`Spring Boot 2.7.18`
 - JDK：`17`
 - 构建工具：`Maven`
-- 数据库：默认使用 `H2 文件数据库（MySQL 兼容模式）`
-- 前端：`Vue 2 + Element UI + Axios`，采用静态页面方式运行
-- 前端启动方式：本地静态文件服务
+- 数据库：默认使用 `MySQL 8.0`
+- 前端：`Vue 2 + Vue Router + Element UI + Axios + Vue CLI`
+- 前端启动方式：`npm run serve`
 - 默认端口：
   - 后端：`8080`
   - 前端：`3000`
@@ -23,14 +23,15 @@
 1. `Git`
 2. `JDK 17`
 3. `Maven 3.8+` 或 `3.9+`
-4. `Python 3.10+`
-5. `Chrome` 浏览器
+4. `Node.js 18+` 或 `20+`
+5. `MySQL 8.0`
+6. `Chrome` 浏览器
 
 说明：
 
-- 当前项目默认使用 `H2`，所以本地演示时不需要先装 MySQL。
+- 当前项目默认使用 `MySQL`，后端启动前需要先保证 MySQL 服务已经启动。
 - 当前项目虽然配置了 `Redis`，但现版本默认演示流程不依赖 Redis 才能启动，所以 Windows 首次运行时可以先不装 Redis。
-- 如果你只是运行项目，不需要安装 Node.js。
+- 当前前端已经改为标准 Vue 工程，所以需要安装 Node.js。
 
 ## 3. 环境安装建议
 
@@ -93,26 +94,39 @@ mvn -version
 
 如果输出中能看到 `Java version: 17`，说明 Maven 和 JDK 配置都正常。
 
-### 3.4 安装 Python
+### 3.4 安装 Node.js
 
 下载：
 
-- [Python for Windows](https://www.python.org/downloads/windows/)
-
-安装时勾选：
-
-- `Add python.exe to PATH`
+- [Node.js LTS](https://nodejs.org/)
 
 验证：
 
 ```powershell
-python --version
+npm -v
+node -v
 ```
 
-如果你的系统命令是 `py`，也可以执行：
+### 3.5 安装 MySQL 8.0
+
+推荐安装：
+
+- [MySQL Community Server 8.0](https://dev.mysql.com/downloads/mysql/)
+
+安装时建议记住你的 root 密码。项目默认按下面参数连接：
+
+- 主机：`127.0.0.1`
+- 端口：`3306`
+- 数据库：`tongcheng_service_system`
+- 用户名：`root`
+- 密码：`root`
+
+如果你的本机 MySQL 密码不是 `root`，也没关系，后面启动时改成你自己的即可。
+
+验证 MySQL 是否可用：
 
 ```powershell
-py --version
+mysql --version
 ```
 
 ## 4. 获取项目
@@ -136,21 +150,39 @@ cd tongcheng-service-system
 其中关键配置是：
 
 - 服务端口：`8080`
-- 数据源：`jdbc:h2:file:./data/tongcheng`
-- H2 控制台：`/h2-console`
+- 数据源：默认连接本机 `MySQL`
 - 上传目录：`uploads`
 
 这意味着：
 
-1. 首次运行后端时，会自动初始化数据库表和演示数据。
-2. 本地不需要单独创建数据库。
-3. 数据文件会写到项目运行目录下的 `data/`。
+1. MySQL 服务需要先启动。
+2. 项目默认会自动创建数据库 `tongcheng_service_system`。
+3. 首次运行后端时，会自动初始化数据库表和演示数据。
+4. 如果你的 MySQL 用户名或密码不是默认值，需要先覆盖配置再启动。
 
 ## 6. Windows 启动项目
 
 建议按“先后端、再前端”的顺序启动。
 
 ### 6.1 启动后端
+
+先确认 MySQL 已启动。
+
+如果你的 MySQL 账号密码就是默认值：
+
+- 用户名：`root`
+- 密码：`root`
+
+那么可以直接启动后端。
+
+如果不是默认值，先在当前终端临时设置环境变量。
+
+PowerShell 示例：
+
+```powershell
+$env:MYSQL_USERNAME="root"
+$env:MYSQL_PASSWORD="你的MySQL密码"
+```
 
 打开 `PowerShell`，进入后端目录：
 
@@ -178,7 +210,7 @@ Started TongchengServiceApplication
 后端访问地址：
 
 - 首页接口基地址：`http://127.0.0.1:8080`
-- H2 控制台：`http://127.0.0.1:8080/h2-console`
+- 默认数据库：`MySQL`
 
 ### 6.2 启动前端
 
@@ -186,27 +218,30 @@ Started TongchengServiceApplication
 
 ```powershell
 cd 你的项目路径\frontend
-python -m http.server 3000
+npm install
+npm run serve
 ```
 
-如果你本机命令是 `py`，可以用：
+首次安装依赖会稍慢一些，完成后会看到类似输出：
 
-```powershell
-py -m http.server 3000
+```text
+App running at:
+- Local:   http://localhost:3000
 ```
-
-启动成功后，访问：
-
-- 门户首页：`http://127.0.0.1:3000`
 
 ## 7. 系统入口
 
 前端启动后，可以使用以下地址进入系统：
 
-- 门户首页：`http://127.0.0.1:3000/index.html`
-- 用户端：`http://127.0.0.1:3000/user.html#/login`
-- 商家工作台：`http://127.0.0.1:3000/merchant.html#/login`
-- 管理端：`http://127.0.0.1:3000/admin.html#/login`
+- 门户首页：`http://127.0.0.1:3000`
+- 用户端：`http://127.0.0.1:3000/#/user/home`
+- 商家工作台：`http://127.0.0.1:3000/#/merchant/login`
+- 管理端：`http://127.0.0.1:3000/#/admin/login`
+- 兼容旧入口：
+  - `http://127.0.0.1:3000/user.html`
+  - `http://127.0.0.1:3000/merchant.html`
+  - `http://127.0.0.1:3000/admin.html`
+  - `http://127.0.0.1:3000/staff.html`
 
 说明：
 
@@ -224,7 +259,7 @@ py -m http.server 3000
 
 说明：
 
-- 员工账号请从 `merchant.html#/login` 页面切换“员工登录”后使用。
+- 员工账号请从 `#/merchant/login` 页面切换“员工登录”后使用。
 
 ## 9. 推荐启动顺序
 
@@ -232,8 +267,8 @@ py -m http.server 3000
 
 1. 启动后端
 2. 确认 `http://127.0.0.1:8080` 可访问
-3. 启动前端静态服务
-4. 打开 `http://127.0.0.1:3000/index.html`
+3. 启动前端 Vue 开发服务器
+4. 打开 `http://127.0.0.1:3000`
 5. 分别进入用户端、商家端、管理端验证
 
 ## 10. 常见问题
@@ -296,24 +331,46 @@ taskkill /PID 进程号 /F
 优先检查：
 
 1. 后端是否真的启动成功
-2. 前端是否通过 `http.server` 打开的，而不是直接双击 html
+2. 前端是否通过 `npm run serve` 启动成功
 3. 浏览器控制台是否有接口报错
 4. `http://127.0.0.1:8080` 是否可访问
 
-建议不要直接双击本地 html 文件运行，优先使用静态服务器方式。
+建议不要直接双击本地 html 文件运行，优先使用 Vue 开发服务器方式。
 
-### 10.6 H2 控制台连不上
+### 10.6 MySQL 连接失败
 
-确认后端已启动，然后访问：
+如果启动后端时报数据库连接错误，优先检查：
 
-- `http://127.0.0.1:8080/h2-console`
+1. MySQL 服务是否已经启动
+2. `3306` 端口是否正常监听
+3. 账号密码是否正确
+4. 当前终端是否设置了正确的 `MYSQL_USERNAME`、`MYSQL_PASSWORD`
 
-默认连接信息按 `application.yml` 填：
+例如在 PowerShell 中重新设置：
 
-- Driver Class：`org.h2.Driver`
-- JDBC URL：`jdbc:h2:file:./data/tongcheng;MODE=MySQL;DATABASE_TO_LOWER=TRUE;AUTO_SERVER=TRUE`
-- User Name：`sa`
-- Password：留空
+```powershell
+$env:MYSQL_HOST="127.0.0.1"
+$env:MYSQL_PORT="3306"
+$env:MYSQL_DATABASE="tongcheng_service_system"
+$env:MYSQL_USERNAME="root"
+$env:MYSQL_PASSWORD="你的MySQL密码"
+```
+
+然后重新执行：
+
+```powershell
+cd 你的项目路径\backend
+mvn spring-boot:run
+```
+
+### 10.7 想回退到 H2 演示库
+
+如果你临时不想装 MySQL，也可以回退到 H2：
+
+```powershell
+cd 你的项目路径\backend
+mvn spring-boot:run "-Dspring-boot.run.profiles=h2"
+```
 
 ## 11. 可选操作
 
@@ -343,8 +400,9 @@ mvn test
 
 1. 安装 `JDK 17`
 2. 安装 `Maven`
-3. 安装 `Python`
-4. 执行下面两组命令
+3. 安装 `Node.js`
+4. 安装并启动 `MySQL 8.0`
+5. 执行下面两组命令
 
 后端：
 
@@ -357,13 +415,14 @@ mvn spring-boot:run
 
 ```powershell
 cd 你的项目路径\frontend
-python -m http.server 3000
+npm install
+npm run serve
 ```
 
 然后打开：
 
 ```text
-http://127.0.0.1:3000/index.html
+http://127.0.0.1:3000
 ```
 
 如果你愿意，我下一步可以继续帮你补一版：

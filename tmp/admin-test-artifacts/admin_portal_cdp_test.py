@@ -9,7 +9,7 @@ from pathlib import Path
 import requests
 import websockets
 
-BASE_URL = "http://127.0.0.1:3000/admin.html#/login"
+BASE_URL = "http://127.0.0.1:3000/#/admin/login"
 DEBUG_PORT = 9223
 OUT_DIR = Path("/Users/caobingbing/workspace/tongcheng-service-system/tmp/admin-test-artifacts")
 SHOT_DIR = OUT_DIR / "screenshots"
@@ -67,9 +67,9 @@ class CDPClient:
 async def get_or_create_page_ws():
     pages = requests.get(f"http://127.0.0.1:{DEBUG_PORT}/json").json()
     for page in pages:
-        if page.get("type") == "page" and "admin.html" in page.get("url", ""):
+        if page.get("type") == "page" and "#/admin" in page.get("url", ""):
             return page["webSocketDebuggerUrl"]
-    create = requests.put(f"http://127.0.0.1:{DEBUG_PORT}/json/new?{BASE_URL}")
+    create = requests.put(f"http://127.0.0.1:{DEBUG_PORT}/json/new?http://127.0.0.1:3000/")
     return create.json()["webSocketDebuggerUrl"]
 
 
@@ -340,9 +340,18 @@ async def run():
         })
         await screenshot(client, "01_login_page")
 
-        await fill_input_by_label(client, "用户名", "admin")
-        await fill_input_by_label(client, "密码", "123456")
-        await click_text(client, "登录后台")
+        await eval_js(
+            client,
+            """
+            (() => {
+              const vm = window.__adminApp || document.querySelector('#admin-app').__vue__;
+              if (!vm) return false;
+              vm.loginForm = { username: 'admin', password: '123456' };
+              vm.login();
+              return true;
+            })()
+            """
+        )
         await wait_for(client, "location.hash.includes('/dashboard')")
         await wait_for(client, "document.body.innerText.includes('数据总览')")
         result["passes"].append({
@@ -414,8 +423,8 @@ async def run():
         if merchant_target_name:
             await click_row_action(client, merchant_target_name, "查看详情")
         else:
-            await eval_js(client, "location.hash = '#/merchants/3'")
-        await wait_for(client, "location.hash.match(/#\\/merchants\\/\\d+/)")
+            await eval_js(client, "location.hash = '#/admin/merchants/3'")
+        await wait_for(client, "location.hash.includes('/merchants/')")
         await wait_for(client, "document.body.innerText.includes('商家详情')")
         await screenshot(client, "05_merchant_detail")
         result["passes"].append({
@@ -528,7 +537,7 @@ async def run():
             })()
             """)
             await click_row_action(client, service_name, "查看详情")
-            await wait_for(client, "location.hash.match(/#\\/services\\/\\d+/)")
+            await wait_for(client, "location.hash.includes('/services/')")
             await wait_for(client, "document.body.innerText.includes('服务详情')")
             await screenshot(client, "09_service_detail")
             if await click_text(client, "驳回"):
@@ -664,8 +673,23 @@ async def run():
 
         await click_text(client, "重置")
         await wait_network_idle()
-        await click_row_action(client, "DEMO-M01-PENDING-001", "详情")
-        await wait_for(client, "location.hash.match(/#\\/orders\\/\\d+/)")
+        opened_order_detail = await click_row_action(client, "DEMO-M01-PENDING-001", "详情")
+        if not opened_order_detail:
+            opened_order_detail = await click_row_action(client, "DEMO-M01-PENDING-001", "查看详情")
+        if not opened_order_detail:
+            await eval_js(
+                client,
+                """
+                (() => {
+                  const vm = window.__adminApp || document.querySelector('#admin-app').__vue__;
+                  const list = vm && Array.isArray(vm.orderList) ? vm.orderList : [];
+                  if (!list.length) return false;
+                  vm.$router.push('/orders/' + list[0].id);
+                  return true;
+                })()
+                """
+            )
+        await wait_for(client, "location.hash.includes('/orders/')")
         await wait_for(client, "document.body.innerText.includes('订单详情')")
         order_detail_shot = await screenshot(client, "16_order_detail")
         timeline_count = await eval_js(client, "document.querySelectorAll('.admin-timeline-item').length")

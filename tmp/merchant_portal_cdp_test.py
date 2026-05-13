@@ -8,7 +8,7 @@ from pathlib import Path
 import requests
 import websockets
 
-BASE_URL = "http://127.0.0.1:3000/merchant.html#/login"
+BASE_URL = "http://127.0.0.1:3000/#/merchant/login"
 API_BASE = "http://127.0.0.1:8080"
 DEBUG_PORT = 9223
 OUT_DIR = Path("/Users/caobingbing/workspace/tongcheng-service-system/tmp/merchant-test-artifacts")
@@ -80,9 +80,9 @@ class CDPClient:
 async def get_or_create_page_ws():
     pages = requests.get(f"http://127.0.0.1:{DEBUG_PORT}/json", timeout=10).json()
     for page in pages:
-        if page.get("type") == "page" and "merchant.html" in page.get("url", ""):
+        if page.get("type") == "page" and "#/merchant" in page.get("url", ""):
             return page["webSocketDebuggerUrl"]
-    create = requests.put(f"http://127.0.0.1:{DEBUG_PORT}/json/new?{BASE_URL}", timeout=10)
+    create = requests.put(f"http://127.0.0.1:{DEBUG_PORT}/json/new?http://127.0.0.1:3000/", timeout=10)
     return create.json()["webSocketDebuggerUrl"]
 
 
@@ -201,14 +201,17 @@ async def ensure_logged_out_entry(client: CDPClient):
             window.__merchantApp.logout();
             return true;
           }
-          location.hash = '#/login';
+          location.hash = '#/merchant/login';
           return true;
         })()
         """,
     )
     await client.call("Page.reload", {"ignoreCache": True})
     await wait_for(client, "document.readyState === 'complete'")
-    await wait_for(client, "document.body && document.body.innerText.includes('商家后台')")
+    await wait_for(
+        client,
+        "document.body && (document.body.innerText.includes('同城服务平台商家工作台') || document.body.innerText.includes('商家后台'))"
+    )
 
 
 async def set_service_form(client: CDPClient):
@@ -527,8 +530,8 @@ async def run():
             })
 
         if detail_order_id:
-            await eval_js(client, f"location.hash = '#/orders/{detail_order_id}'")
-            await wait_for(client, "location.hash.match(/#\\/orders\\/\\d+/)")
+            await eval_js(client, f"location.hash = '#/merchant/orders/{detail_order_id}'")
+            await wait_for(client, "location.hash.includes('/orders/')")
             await wait_for(client, "document.body.innerText.includes('订单详情')")
             order_detail_shot = await screenshot(client, "12_order_detail")
             if await eval_js(client, "document.body.innerText.includes('订单详情') && (document.body.innerText.includes('服务与用户信息') || (document.body.innerText.includes('用户名') && document.body.innerText.includes('服务名称'))) && document.body.innerText.includes('关键时间点')"):

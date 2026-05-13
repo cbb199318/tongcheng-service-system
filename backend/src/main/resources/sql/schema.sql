@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS merchant (
   logo VARCHAR(255),
   phone VARCHAR(20) NOT NULL,
   address VARCHAR(255) NOT NULL,
-  intro CLOB,
+  intro TEXT,
   audit_status CHAR(1) NOT NULL DEFAULT '0',
   audit_remark VARCHAR(255),
   rating DECIMAL(3,2) DEFAULT 5.00,
@@ -47,8 +47,8 @@ CREATE TABLE IF NOT EXISTS service_item (
   name VARCHAR(100) NOT NULL,
   price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
   duration INT,
-  description CLOB,
-  images CLOB,
+  description TEXT,
+  images TEXT,
   tags VARCHAR(255),
   sales INT DEFAULT 0,
   status TINYINT NOT NULL DEFAULT 1,
@@ -77,12 +77,11 @@ CREATE TABLE IF NOT EXISTS order_info (
   cancel_time TIMESTAMP NULL,
   cancel_reason VARCHAR(255),
   is_commented TINYINT NOT NULL DEFAULT 0,
+  staff_id BIGINT,
+  assign_time TIMESTAMP NULL,
   create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-ALTER TABLE order_info ADD COLUMN IF NOT EXISTS staff_id BIGINT;
-ALTER TABLE order_info ADD COLUMN IF NOT EXISTS assign_time TIMESTAMP NULL;
 
 CREATE TABLE IF NOT EXISTS review (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -92,7 +91,7 @@ CREATE TABLE IF NOT EXISTS review (
   service_id BIGINT NOT NULL,
   rating TINYINT NOT NULL,
   content VARCHAR(1000),
-  images CLOB,
+  images TEXT,
   reply VARCHAR(1000),
   reply_time TIMESTAMP NULL,
   create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -134,7 +133,7 @@ CREATE TABLE IF NOT EXISTS banner (
 CREATE TABLE IF NOT EXISTS notice (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(100) NOT NULL,
-  content CLOB NOT NULL,
+  content TEXT NOT NULL,
   status TINYINT NOT NULL DEFAULT 1,
   create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP

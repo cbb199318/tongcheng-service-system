@@ -2,21 +2,21 @@
 
 基于论文《基于SpringBoot同城服务管理系统的设计与实现》整理并落地的一期演示工程，包含：
 
-- `backend/`：Spring Boot 2.7 + MyBatis-Plus + JWT + H2/MySQL profile
-- `frontend/`：轻量三门户前端页面（用户端、商家端、管理端）
+- `backend/`：Spring Boot 2.7 + MyBatis-Plus + JWT + MySQL/H2 profile
+- `frontend/`：标准 Vue 2 工程，统一承载用户端、商家端、管理端
 - 根目录论文与设计文档：产品、接口、数据库设计说明
 
 ## 目录结构
 
 ```text
 backend/   后端 API、数据库初始化、鉴权与业务逻辑
-frontend/  三门户静态前端页面
+frontend/  Vue 2 前端工程（npm run serve）
 ```
 
 ## 默认技术实现
 
-- 后端：SpringBoot 2.7、MyBatis-Plus、JWT、H2(MySQL 模式)
-- 前端：Vue 2、Element UI、Axios（CDN 方式加载）
+- 后端：SpringBoot 2.7、MyBatis-Plus、JWT、MySQL 8.0
+- 前端：Vue 2、Vue Router、Element UI、Axios、Vue CLI
 - 预留能力：积分兑换、人员招募、服务沟通
 
 ## 启动方式
@@ -32,26 +32,44 @@ mvn spring-boot:run
 
 说明：
 
-- 默认 profile 使用 H2 文件库，便于本地直接演示
-- H2 控制台：`http://127.0.0.1:8080/h2-console`
-- 如需切换到 MySQL，可自行补充数据库并使用 `application-mysql.yml`
-
-### 2. 打开前端
-
-可直接打开以下页面，或通过任意静态文件服务器访问：
-
-- `frontend/index.html`
-- `frontend/user.html`
-- `frontend/merchant.html`
-- `frontend/admin.html`
-
-如果你希望通过本地静态服务访问，可在 `frontend/` 目录下执行：
+- 默认数据源已切换为 MySQL
+- 默认连接参数：
+  - 主机：`127.0.0.1`
+  - 端口：`3306`
+  - 数据库：`tongcheng_service_system`
+  - 用户名：`root`
+  - 密码：`root`
+- 程序会自动建库并执行 `schema.sql`、`data.sql`
+- 如本机 MySQL 用户名或密码不同，可通过环境变量覆盖：
+  - `MYSQL_HOST`
+  - `MYSQL_PORT`
+  - `MYSQL_DATABASE`
+  - `MYSQL_USERNAME`
+  - `MYSQL_PASSWORD`
+- 如需回退到 H2，可使用：
 
 ```bash
-python3 -m http.server 3000
+cd backend
+mvn spring-boot:run -Dspring-boot.run.profiles=h2
 ```
 
-然后访问 `http://127.0.0.1:3000`
+### 2. 启动前端
+
+```bash
+cd frontend
+npm install
+npm run serve
+```
+
+默认启动在 `http://127.0.0.1:3000`
+
+主入口与兼容入口：
+
+- 门户首页：`http://127.0.0.1:3000`
+- 用户端：`http://127.0.0.1:3000/#/user/home`
+- 商家端：`http://127.0.0.1:3000/#/merchant/login`
+- 管理端：`http://127.0.0.1:3000/#/admin/login`
+- 兼容旧入口：`/user.html`、`/merchant.html`、`/admin.html`、`/staff.html`
 
 ## 演示账号
 
@@ -77,7 +95,7 @@ python3 -m http.server 3000
 - 服务新增、编辑、上下架、删除
 - 订单接单、拒单、开始服务、完成服务
 - 评价回复
-- 招募/沟通扩展入口
+- 员工账号登录、员工管理、订单分配、订单沟通
 
 ### 管理端
 
